@@ -1,0 +1,90 @@
+package com.vic.rabbitmq.app;
+
+import java.time.LocalDate;
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.vic.rabbitmq.app.entity.DummyMessage;
+import com.vic.rabbitmq.app.entity.InvoiceCancelledMessage;
+import com.vic.rabbitmq.app.entity.InvoiceCreateMessage;
+import com.vic.rabbitmq.app.entity.InvoicePaidMessage;
+import com.vic.rabbitmq.app.entity.InvoiceRejectedMessage;
+import com.vic.rabbitmq.app.producer.DummyProducer;
+import com.vic.rabbitmq.app.producer.InvoiceProducer;
+import com.vic.rabbitmq.app.producer.MultiplePrefetchProducer;
+
+@SpringBootApplication
+public class RabbitmqProducerTwoApplication implements CommandLineRunner {
+
+	@Autowired
+	private DummyProducer dummyProducer;
+		
+	@Autowired
+	private MultiplePrefetchProducer multiplePrefetchProducer;
+	
+	@Autowired
+	private InvoiceProducer invoiceProducer;
+		
+	public static void main(String[] args) {
+		SpringApplication.run(RabbitmqProducerTwoApplication.class, args);
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		//producerCron();
+		//producerPrefetch();
+		//multiplePrefetchProducer.sendSimulateScheduler();
+		//multiplePrefetchProducer.sendSimulateTransaction();
+		//producerInvoice();
+		producerInvoiceHash();
+	}
+	
+	
+	public void producerCron() throws InterruptedException {
+		for(int i=0;i<100000;i++) {
+			var dummyMessage=new DummyMessage("this is a test",i);
+			//System.out.println("Publish "+dummyMessage.toString());
+			dummyProducer.sendDummy(dummyMessage);	
+			Thread.sleep(1000);
+		}
+	}
+	
+	public void producerPrefetch() throws InterruptedException {
+		for(int i=0;i<500;i++) {
+			var dummyMessage=new DummyMessage("this is a test",i);
+			dummyProducer.sendDummy(dummyMessage);		
+		}
+	}
+	
+	public void producerInvoice() throws InterruptedException {
+		var randomInvoiceNumber = "INV-"+ThreadLocalRandom.current().nextInt(100,200);
+		var invoiceCreatedMessage=new InvoiceCreateMessage(154.25, LocalDate.now(), "USD", randomInvoiceNumber);
+		invoiceProducer.sendInvoiceCreated(invoiceCreatedMessage);
+		
+		randomInvoiceNumber="INV-"+ThreadLocalRandom.current().nextInt(200,300);
+		var randomPaidNumber="PAY-"+ThreadLocalRandom.current().nextInt(20000,30000);
+		var invoicePaidMessage =new InvoicePaidMessage(randomInvoiceNumber, LocalDate.now(), randomPaidNumber);
+		invoiceProducer.sendInvoicePaid(invoicePaidMessage);
+		
+		randomInvoiceNumber="INV-"+ThreadLocalRandom.current().nextInt(300,400);		
+		var invoiceCancelledMessage =new InvoiceCancelledMessage(LocalDate.now(), randomPaidNumber,"Just cancel it");
+		invoiceProducer.sendInvoiceCancelled(invoiceCancelledMessage);
+		
+		randomInvoiceNumber="INV-"+ThreadLocalRandom.current().nextInt(400,500);	
+		var invoiceRejectedMessage =new InvoiceRejectedMessage(LocalDate.now(), randomPaidNumber,"I want to reject this one");
+		invoiceProducer.sendInvoiceRejected(invoiceRejectedMessage);
+	}
+	
+	public void producerInvoiceHash() throws InterruptedException {
+		for (int i = 0; i < 20; i++) {
+			var invoiceNumber = "invoice"+(i%6);
+			var invoice=new InvoiceCreateMessage(ThreadLocalRandom.current().nextInt(100), LocalDate.now(), "USD", invoiceNumber);
+			invoiceProducer.sendInvoiceCreated(invoice);
+		}
+	}
+
+}

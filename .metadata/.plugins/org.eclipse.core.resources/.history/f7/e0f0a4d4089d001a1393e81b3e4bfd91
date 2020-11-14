@@ -1,0 +1,28 @@
+package com.vic.rabbitmq.app.consumer;
+
+import org.springframework.amqp.rabbit.annotation.RabbitHandler;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Service;
+
+import com.vic.rabbitmq.app.entity.InvoiceCreateMessage;
+import com.vic.rabbitmq.app.entity.InvoicePaidMessage;
+
+@Service
+@RabbitListener(queues="q.invoice")
+public class InvoiceConsumer {
+
+	@RabbitHandler
+	public void handleInvoiceCreated(InvoiceCreateMessage message) {
+		System.out.println("on handleInvoiceCreated: "+message);
+	}
+	
+	@RabbitHandler
+	public void handleInvoicePaid(InvoicePaidMessage message) {
+		System.out.println("on handleInvoicePaid: "+message);
+	}
+	
+	@RabbitHandler
+	public void handleDefault(isDefault = true) {
+		
+	}
+}

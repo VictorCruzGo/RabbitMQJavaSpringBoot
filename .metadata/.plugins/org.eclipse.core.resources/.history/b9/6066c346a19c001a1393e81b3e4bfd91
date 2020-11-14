@@ -1,0 +1,9 @@
+package com.vic.rabbitmq.app.consumer;
+
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+
+@Service
+@RabbitListener(queues="q.invoice")
+public class InvoiceConsumer {
+
+}

@@ -1,0 +1,35 @@
+import java.util.stream.Stream;
+
+public class Examen {
+	public static void main(String args[]) {
+		
+		System.out.println(ejercicio1());		
+	}
+	
+	public static int ejercicio1() {
+		int V[] ={2,3,4,3,2,1};		
+		int numero=3;
+		int nv=0;
+		
+		for (int i = 0; i < V.length; i++) {
+			if(V[i]==numero) {
+				nv=nv+1;
+			}	
+		}
+		
+		return nv;
+	}
+	
+	public static int ejercicio2() {
+		int V[] ={2,3,4,3,2,1};		
+		int numero=3;
+		int nv=0;
+		
+		Stream.of(V).forEach(valor->{
+			System.out.println(valor);
+		});
+					
+		
+		return nv;
+	}
+}

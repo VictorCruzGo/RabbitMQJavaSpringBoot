@@ -1,0 +1,7 @@
+package com.vic.rabbitmq.app.entity;
+
+public class InvoicePaidMessage {
+	private String invoiceNumber;
+	private LocalDate paidDate;
+	
+}

@@ -1,0 +1,17 @@
+package com.vic.rabbitmq.app.entity;
+
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.vic.rabbitmq.app.json.CustomLocalDateDeserializer;
+import com.vic.rabbitmq.app.json.CustomLocalDateSerializer;
+
+public class PaymentCancelStatus {
+	
+	private boolean cancelStatus;
+	@JsonSerialize(using = CustomLocalDateSerializer.class)
+	private LocalDate cancelDate;
+	private String invoiceNumber;
+
+}

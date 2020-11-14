@@ -1,0 +1,5 @@
+package com.vic.rabbitmq.app.producer;
+
+public class MultiplePrefetchProducer {
+
+}

@@ -1,0 +1,5 @@
+package com.vic.rabbitmq.app.consumer;
+
+public class InvoiceConsumer {
+
+}

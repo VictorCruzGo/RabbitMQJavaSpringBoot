@@ -1,0 +1,4 @@
+#Estable el valor de redistribucion de rabbitmq a los consumidores.
+#spring.rabbitmq.listener.simple.prefetch=1
+
+

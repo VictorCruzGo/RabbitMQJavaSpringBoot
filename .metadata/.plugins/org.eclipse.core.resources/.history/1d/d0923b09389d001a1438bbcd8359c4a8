@@ -1,0 +1,11 @@
+package com.vic.rabbitmq.app.entity;
+
+import java.time.LocalDate;
+
+public class PaymentCancelStatus {
+	
+	private boolean cancelStatus;
+	private LocalDate cancelDate;
+	private String invoiceNumber;
+
+}
